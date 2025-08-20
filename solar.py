@@ -16,7 +16,7 @@ class Sun:
 
         self.lngHour = self._lon / 15
 
-    def get_sunrise_time(self, at_date, utc_offset):
+    def get_sunrise_time(self, at_date, utc_offset,sunrise_offset):
         """
         :param at_date: Reference date. datetime.now() if not provided.
         :param time_zone: pytz object with .tzinfo() or None
@@ -28,10 +28,11 @@ class Sun:
         if self.is_dst_europe_manual(time_delta):
             time_delta +=timedelta(hours=1)
         time_delta += utc_offset
+        time_delta += sunrise_offset
         
         return time_delta
 
-    def get_sunset_time(self, at_date, utc_offset):
+    def get_sunset_time(self, at_date, utc_offset, sunset_offset):
         """
         Calculate the sunset time for given date.
         :param at_date: Reference date. datetime.now() if not provided.
@@ -44,6 +45,7 @@ class Sun:
         if self.is_dst_europe_manual(time_delta):
             time_delta +=timedelta(hours=1)
         time_delta += utc_offset
+        time_delta += sunset_offset
         
         return time_delta
         
