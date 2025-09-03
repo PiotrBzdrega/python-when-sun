@@ -6,7 +6,6 @@ from zoneinfo import ZoneInfo
 TO_RAD = math.pi / 180.0
 TO_HOUR = 12.0 / math.pi
 
-
 class Sun:
     """
     Approximated calculation of sunrise and sunset datetimes. Adapted from:
@@ -19,7 +18,7 @@ class Sun:
 
         self.lngHour = self._lon / 15
 
-    def get_sunrise_time(self, at_date, utc_offset, sunrise_offset, tz: ZoneInfo):
+    def get_sunrise_time(self, at_date, sunrise_offset, tz: ZoneInfo):
         """
         :param at_date: Reference date. datetime.now() if not provided.
         :param time_zone: pytz object with .tzinfo() or None
@@ -35,7 +34,7 @@ class Sun:
 
         return time_delta
 
-    def get_sunset_time(self, at_date, utc_offset, sunset_offset, tz: ZoneInfo):
+    def get_sunset_time(self, at_date, sunset_offset, tz: ZoneInfo):
         """
         Calculate the sunset time for given date.
         :param at_date: Reference date. datetime.now() if not provided.

@@ -29,9 +29,6 @@ parser.add_argument(
     "--lon", help="Longitude (default=16.56)", default=16.56, type=float, metavar=""
 )
 parser.add_argument(
-    "--utc_offset", help="UTC offset (default 1)", default=1, type=int, metavar=""
-)
-parser.add_argument(
     "--year", help="year (default now)", default=date.today().year, type=int, metavar=""
 )
 parser.add_argument(
@@ -85,16 +82,12 @@ print(
 days2025 = get_all_days(args.year)
 
 sun = Sun(args.lat, args.lon)
-
-utc = timedelta(hours=args.utc_offset)
 sunrise_offset = timedelta(minutes=args.sunrise_offset)
 sunset_offset = timedelta(minutes=args.sunset_offset)
-# no_european_dst = args.no_european_dst
-
 
 for d in days2025:
-    sr = sun.get_sunrise_time(d, utc, sunrise_offset, tz)
-    ss = sun.get_sunset_time(d, utc, sunset_offset, tz)
+    sr = sun.get_sunrise_time(d, sunrise_offset, tz)
+    ss = sun.get_sunset_time(d, sunset_offset, tz)
     print(f"{d.strftime('%Y%m%d')} {sr.strftime('%H:%M')} {ss.strftime('%H:%M')}")
 
 # with open('sun_events.json', 'w') as f:
