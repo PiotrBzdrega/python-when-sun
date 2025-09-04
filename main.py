@@ -18,7 +18,7 @@ def is_valid_timezone(timezone_str):
 
 parser = argparse.ArgumentParser(
     description="Get whole year sun events in following format: 20261128 08:23 16:35",
-    epilog="python3 ./main.py --lat=52.22 --lon=4.54 --utc_offset=1 --year=2026 --sunset_offset=15 --sunrise_offset=15 --timezone=Europe/Amsterdam",
+    epilog="python3 ./main.py --lat=52.22 --lon=4.54 --year=2026 --sunset_offset=15 --sunrise_offset=15 --timezone=Europe/Amsterdam",
 )
 
 # Add arguments
@@ -52,12 +52,6 @@ parser.add_argument(
     type=str,
     metavar="",
 )
-parser.add_argument(
-    "--no_european_dst",
-    help="do not use (European) daylight summertime",
-    default=False,
-    action="store_true",
-)
 
 args = parser.parse_args()
 
@@ -73,10 +67,16 @@ if not is_valid_timezone(args.timezone):
     )
     exit(1)
 tz = ZoneInfo(args.timezone)
+now = datetime.now()
+utc_offset = now.astimezone(tz).strftime("%z")
+hours = int(utc_offset[:3])  # Gets "-02" and converts to -2
+minutes = float(utc_offset[3:])/60     # minutes to 0-1 float
+utc_dst=hours+minutes
+utc = utc_dst - (tz.dst(now).total_seconds()/3600)
 """"""
 
 print(
-    f"\033[94mLatitude={args.lat}, Longitude={args.lon}, Year={args.year} Timezone={args.timezone}, UTC offset according timezone={tz.utcoffset()}\033[0m"
+    f"\033[94mLatitude={args.lat}, Longitude={args.lon}, Year={args.year} Timezone={args.timezone}, UTC offset according timezone={utc}h\033[0m"
 )
 
 days2025 = get_all_days(args.year)
